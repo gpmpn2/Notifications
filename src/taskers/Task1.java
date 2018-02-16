@@ -6,6 +6,8 @@
 package taskers;
 
 import javafx.application.Platform;
+import javafx.scene.control.Button;
+import notifcationexamples.NotificationsUIController;
 
 /**
  *
@@ -23,25 +25,40 @@ public class Task1 extends Thread {
     
     private Notifiable notificationTarget;
     
+    private States state;
+    
     public Task1(int maxValue, int notifyEvery)  {
         this.maxValue = maxValue;
         this.notifyEvery = notifyEvery;
+        this.state = States.INACTIVE;
     }
     
     @Override
     public void run() {
-        doNotify("Task1 start.");
+        doNotify("Task1 is now " + state.name() + ".");
         for (int i = 0; i < maxValue; i++) {
             
             if (i % notifyEvery == 0) {
-                doNotify("It happened in Task1: " + i);
+                doNotify("Task1 is " + state.name() + " at: " + i);
             }
             
             if (exit) {
+                updateUser();
                 return;
             }
         }
-        doNotify("Task1 done.");
+        
+        setState(States.NATURAL_STOP);
+        doNotify("Task1 has come to a " + state.name() +".");
+        
+        setState(States.INACTIVE);
+        doNotify("Task1 is now " + state.name() + ".");
+    }
+    
+    public void updateUser() {
+        doNotify("Task1 has come to a " + state.name() +".");
+        setState(States.INACTIVE);
+        doNotify("Task1 is now " + state.name() +".");
     }
     
     public void end() {
@@ -59,5 +76,9 @@ public class Task1 extends Thread {
                 notificationTarget.notify(message);
             });
         }
+    }
+    
+    public void setState(States state) {
+        this.state = state;
     }
 }

@@ -24,25 +24,40 @@ public class Task3 extends Thread {
     
     private final PropertyChangeSupport pcs = new PropertyChangeSupport(this);
     
+    private States state;
+    
     public Task3(int maxValue, int notifyEvery)  {
         this.maxValue = maxValue;
         this.notifyEvery = notifyEvery;
+        this.state = States.INACTIVE;
     }
     
     @Override
     public void run() {
-        doNotify("Task3 start.");
+        setState(States.ACTIVE);
+        doNotify("Task3 is now " + state.name() + ".");
         for (int i = 0; i < maxValue; i++) {
             
             if (i % notifyEvery == 0) {
-                doNotify("It happened in Task3: " + i);
+                doNotify("Task3 is " + state.name() + " at: " + i);
             }
             
             if (exit) {
+                updateUser();
                 return;
             }
         }
-        doNotify("Task3 done.");
+        setState(States.NATURAL_STOP);
+        doNotify("Task3 has come to a " + state.name() +".");
+        
+        setState(States.INACTIVE);
+        doNotify("Task3 is now " + state.name() + ".");
+    }
+    
+    public void updateUser() {
+        doNotify("Task3 has come to a " + state.name() +".");
+        setState(States.INACTIVE);
+        doNotify("Task3 is now " + state.name() +".");
     }
     
     public void end() {
@@ -65,5 +80,9 @@ public class Task3 extends Thread {
             // I'm choosing not to send the old value (second param).  Sending "" instead.
             pcs.firePropertyChange("message", "", message);
         });
+    }
+    
+    public void setState(States state) {
+        this.state = state;
     }
 }

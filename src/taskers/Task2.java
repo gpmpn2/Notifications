@@ -24,26 +24,40 @@ public class Task2 extends Thread {
     
     private ArrayList<Notification> notifications = new ArrayList<>();
     
+    private States state;
+    
     public Task2(int maxValue, int notifyEvery)  {
         this.maxValue = maxValue;
         this.notifyEvery = notifyEvery;
+        this.state = States.INACTIVE;
     }
     
     @Override
     public void run() {
-        doNotify("Started Task2!");
-        
+        setState(States.ACTIVE);
+        doNotify("Task2 is now " + state.name() + ".");
         for (int i = 0; i < maxValue; i++) {
             
             if (i % notifyEvery == 0) {
-                doNotify("It happened in Task2: " + i);
+                doNotify("Task2 is " + state.name() + " at: " + i);
             }
             
             if (exit) {
+                updateUser();
                 return;
             }
         }
-        doNotify("Task2 done.");
+        setState(States.NATURAL_STOP);
+        doNotify("Task2 has come to a " + state.name() +".");
+        
+        setState(States.INACTIVE);
+        doNotify("Task2 is now " + state.name() + ".");
+    }
+    
+    public void updateUser() {
+        doNotify("Task2 has come to a " + state.name() +".");
+        setState(States.INACTIVE);
+        doNotify("Task2 is now " + state.name() +".");
     }
     
     public void end() {
@@ -62,5 +76,9 @@ public class Task2 extends Thread {
                 notification.handle(message);
             });
         }
+    }
+    
+    public void setState(States state) {
+        this.state = state;
     }
 }
