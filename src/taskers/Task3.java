@@ -7,6 +7,8 @@ package taskers;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 
 /**
@@ -52,6 +54,11 @@ public class Task3 extends Thread {
         
         setState(States.INACTIVE);
         doNotify("Task3 is now " + state.name() + ".");
+        try {
+            this.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void updateUser() {

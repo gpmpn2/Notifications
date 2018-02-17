@@ -5,6 +5,8 @@
  */
 package taskers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import notifcationexamples.NotificationsUIController;
@@ -53,6 +55,11 @@ public class Task1 extends Thread {
         
         setState(States.INACTIVE);
         doNotify("Task1 is now " + state.name() + ".");
+        try {
+            this.join();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Task1.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void updateUser() {

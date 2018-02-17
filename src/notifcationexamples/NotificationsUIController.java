@@ -94,7 +94,6 @@ public class NotificationsUIController implements Initializable, Notifiable {
             taskTwoButton.setText("End Task 2");
             task2 = new Task2(2147483647, 1000000);
             task2.setOnNotification((String message) -> {
-                System.out.println("MESSAGE: " + message);
                 if (message.equals("Task2 is now INACTIVE.")) {
                     taskTwoButton.setText("Start Task 2");
                     task2 = null;
@@ -104,6 +103,7 @@ public class NotificationsUIController implements Initializable, Notifiable {
             
             task2.start();
         } else if(task2.isAlive()) {
+            System.out.println("HERE!");
             task2.setState(States.FORCE_STOP);
             task2.end();
             try {
@@ -130,6 +130,7 @@ public class NotificationsUIController implements Initializable, Notifiable {
             
             task3.start();
         } else if(task3.isAlive()) {
+            System.out.println("YO");
             task3.setState(States.FORCE_STOP);
             task3.end();
             try {
